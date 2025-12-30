@@ -2,7 +2,7 @@
 using System.Linq;
 using UnityEngine;
 
-namespace CheeseMods.AIHelicopterGunner.AIStates;
+namespace CheeseMods.CheeseDroneBase.AIStates;
 
 public class State_Sequence : AITryState
 {

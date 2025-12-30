@@ -1,26 +1,23 @@
-﻿using CheeseMods.AIHelicopterGunner.AIStates;
-using CheeseMods.CheeseDroneBase.Components;
-using UnityEngine;
+﻿using CheeseMods.CheeseDroneBase.Components;
 
-namespace CheeseDroneBase.AIStates.FPV
+namespace CheeseMods.CheeseDroneBase.AIStates.FPV;
+
+public abstract class State_TargetAttackBase : AITryState
 {
-    public abstract class State_TargetAttackBase : AITryState
+    public FPVDroneAI droneAI;
+
+    public State_TargetAttackBase(FPVDroneAI droneAI)
     {
-        public FPVDroneAI droneAI;
+        this.droneAI = droneAI;
+    }
 
-        public State_TargetAttackBase(FPVDroneAI droneAI)
-        {
-            this.droneAI = droneAI;
-        }
+    public override bool CanStart()
+    {
+        return droneAI.target != null && droneAI.target.alive;
+    }
 
-        public override bool CanStart()
-        {
-            return droneAI.target != null && droneAI.target.alive;
-        }
-
-        public override bool IsOver()
-        {
-            return droneAI.target == null || !droneAI.target.alive;
-        }
+    public override bool IsOver()
+    {
+        return droneAI.target == null || !droneAI.target.alive;
     }
 }

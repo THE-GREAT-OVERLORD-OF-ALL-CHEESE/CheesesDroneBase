@@ -6,15 +6,6 @@ namespace CheeseMods.CheeseDroneBase.Components
     {
         public FPVDroneAI fpvAi;
 
-        /*
-        public override void OnSpawnUnit()
-        {
-            Debug.Log("FPV drone spawning");
-            gameObject.SetActive(true);
-            base.OnSpawnUnit();
-        }
-        */
-
         [VTEvent("Launch", "Take off and destroy the first thing we see")]
         public void Launch()
         {

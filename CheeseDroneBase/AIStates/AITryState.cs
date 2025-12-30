@@ -1,4 +1,4 @@
-﻿namespace CheeseMods.AIHelicopterGunner.AIStates;
+﻿namespace CheeseMods.CheeseDroneBase.AIStates;
 
 public abstract class AITryState
 {

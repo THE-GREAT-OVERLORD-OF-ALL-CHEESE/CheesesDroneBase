@@ -1,65 +1,62 @@
-﻿using CheeseMods.AIHelicopterGunner.AIStates;
-using CheeseMods.CheeseDroneBase.Components;
-using System.Security.Policy;
+﻿using CheeseMods.CheeseDroneBase.Components;
 using UnityEngine;
 
-namespace CheeseDroneBase.AIStates.FPV
+namespace CheeseMods.CheeseDroneBase.AIStates.FPV;
+
+public class State_TerminalFlight : State_TargetAttackBase
 {
-    public class State_TerminalFlight : State_TargetAttackBase
+    public override string Name => "Terminal Flight";
+
+    public override float WarmUp => 0.5f;
+
+    public override float CoolDown => 0.5f;
+
+    public float hBias;
+    public float vBias;
+    public float maxRange;
+
+    public State_TerminalFlight(FPVDroneAI droneAI, float hBias, float vBias, float maxRange) : base(droneAI)
     {
-        public override string Name => "Terminal Flight";
+        this.hBias = hBias;
+        this.vBias = vBias;
+        this.maxRange = maxRange;
+    }
 
-        public override float WarmUp => 0.5f;
+    public override bool CanStart()
+    {
+        if (!base.CanStart())
+            return false;
 
-        public override float CoolDown => 0.5f;
+        Vector3 offset = droneAI.target.position - droneAI.pilot.flightModel.tf.position;
+        return offset.magnitude < maxRange;
+    }
 
-        public float hBias;
-        public float vBias;
-        public float maxRange;
+    public override void StartState()
+    {
+        Debug.Log("Explody crashy time");
+        droneAI.fuse.Arm();
+    }
 
-        public State_TerminalFlight(FPVDroneAI droneAI, float hBias, float vBias, float maxRange) : base(droneAI)
-        {
-            this.hBias = hBias;
-            this.vBias = vBias;
-            this.maxRange = maxRange;
-        }
+    public override void UpdateState()
+    {
+        if (droneAI.target == null)
+            return;
 
-        public override bool CanStart()
-        {
-            if (!base.CanStart())
-                return false;
+        droneAI.pilot.FlyTowardsPos(droneAI.target.position, Mathf.Max(droneAI.pilot.flightModel.rb.velocity.magnitude + 5f, 10f));
+    }
 
-            Vector3 offset = droneAI.target.position - droneAI.pilot.flightModel.tf.position;
-            return offset.magnitude < maxRange;
-        }
+    public override void EndState()
+    {
+        Debug.Log("i've changed my mind...");
+        droneAI.fuse.Disarm();
+    }
 
-        public override void StartState()
-        {
-            Debug.Log("Explody crashy time");
-            droneAI.fuse.Arm();
-        }
+    public override bool IsOver()
+    {
+        if (base.IsOver())
+            return true;
 
-        public override void UpdateState()
-        {
-            if (droneAI.target == null)
-                return;
-
-            droneAI.pilot.FlyTowardsPos(droneAI.target.position, Mathf.Max(droneAI.pilot.flightModel.rb.velocity.magnitude + 5f, 10f));
-        }
-
-        public override void EndState()
-        {
-            Debug.Log("i've changed my mind...");
-            droneAI.fuse.Disarm();
-        }
-
-        public override bool IsOver()
-        {
-            if (base.IsOver())
-                return true;
-
-            Vector3 offset = droneAI.target.position - droneAI.pilot.flightModel.tf.position;
-            return offset.magnitude > maxRange;
-        }
+        Vector3 offset = droneAI.target.position - droneAI.pilot.flightModel.tf.position;
+        return offset.magnitude > maxRange;
     }
 }

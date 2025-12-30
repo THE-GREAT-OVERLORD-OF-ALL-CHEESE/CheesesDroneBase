@@ -1,5 +1,5 @@
-using CheeseDroneBase.AIStates.FPV;
-using CheeseMods.AIHelicopterGunner.AIStates;
+using CheeseMods.CheeseDroneBase.AIStates;
+using CheeseMods.CheeseDroneBase.AIStates.FPV;
 using System.Collections.Generic;
 using UnityEngine;
 
