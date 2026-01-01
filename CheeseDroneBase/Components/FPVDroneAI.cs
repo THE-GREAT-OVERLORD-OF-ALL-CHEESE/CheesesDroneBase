@@ -145,22 +145,21 @@ public class FPVDroneAI : MonoBehaviour
     }
 
     public VisualTargetFinder targetFinder;
-    public QuadPilot pilot;
+    public MultirotorPilot pilot;
     public FPVDroneFuse fuse;
-    public Actor target;
+    internal Actor target;
 
-    public AITryState states;
+    private AITryState states;
 
     //private List<List<FPVDroneState>> strategies;
     //private List<FPVDroneState> states;
     private int stateId;
     public int overrideStrat = -1;
 
-    public bool activated;
-    public bool done;
+    internal bool activated;
 
-    public Vector3D basePosition;
-    public bool landed = true;
+    internal Vector3D basePosition;
+    internal bool landed = true;
 
     private void Start()
     {
@@ -217,7 +216,7 @@ public class FPVDroneAI : MonoBehaviour
                 new State_TakeOff(this),
                 new State_FindTarget(this),
                 new State_FlyToTarget(this, 0.0f, 0.1f, 200f, 2500f),
-                new State_TerminalFlight(this, 0.1f, 0.1f, 250f),
+                new State_TerminalFlight(this, 0.1f, 0.1f, 10f, 250f),
             },
             "States",
             0f,

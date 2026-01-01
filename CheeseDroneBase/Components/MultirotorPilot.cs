@@ -2,9 +2,9 @@ using UnityEngine;
 
 namespace CheeseMods.CheeseDroneBase.Components;
 
-public class QuadPilot : MonoBehaviour
+public class MultirotorPilot : MonoBehaviour
 {
-    public SimpleQuadFlightModel flightModel;
+    public SimpleMultirotorFlightModel flightModel;
 
     public float maxSpeed = 30f;
     public float speedFactor = 1f;

@@ -6,7 +6,7 @@ namespace CheeseMods.CheeseDroneBase.Components;
 public class FPVDroneFuse : MonoBehaviour
 {
     public Actor actor;
-    public SimpleQuadFlightModel flightModel;
+    public SimpleMultirotorFlightModel flightModel;
 
     public float contactFuseChance;
     public float maxDelay = 0.5f;
@@ -45,8 +45,7 @@ public class FPVDroneFuse : MonoBehaviour
     {
         if (Vector3.Dot(col.contacts.First().normal, flightModel.tf.up) < 0)
         {
-            Explode();
-            fuseActive = true;
+            ActivateFuse();
             return;
         }
 
@@ -63,15 +62,19 @@ public class FPVDroneFuse : MonoBehaviour
         else
         {
             flightModel.BreakQuad();
-            fuseTimer = Random.Range(0, maxDelay);
-            fuseActive = true;
+            ActivateFuse();
         }
+    }
+
+    public void ActivateFuse()
+    {
+        fuseTimer = Random.Range(0, maxDelay);
+        fuseActive = true;
     }
 
     public void Explode()
     {
         gameObject.SetActive(false);
-        //Destroy(gameObject);
         ExplosionManager.instance.CreateExplosionEffect(explosionType, flightModel.tf.position, flightModel.rb.velocity.normalized);
         ExplosionManager.instance.CreateDamageExplosion(flightModel.tf.position, radius, damage, actor, flightModel.rb.velocity);
     }
@@ -79,7 +82,6 @@ public class FPVDroneFuse : MonoBehaviour
     public void SelfDestruct()
     {
         gameObject.SetActive(false);
-        //Destroy(gameObject);
-        //ExplosionManager.instance.CreateExplosionEffect(explosionType, flightModel.tf.position, flightModel.rb.velocity.normalized);
+        ExplosionManager.instance.CreateExplosionEffect(ExplosionManager.ExplosionTypes.DebrisPoof, flightModel.tf.position, flightModel.rb.velocity.normalized);
     }
 }

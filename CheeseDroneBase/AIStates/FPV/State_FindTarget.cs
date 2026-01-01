@@ -25,7 +25,7 @@ public class State_FindTarget : AITryState
 
     public override void StartState()
     {
-
+        Debug.Log("No target, searching");
     }
 
     public override void UpdateState()
@@ -40,7 +40,7 @@ public class State_FindTarget : AITryState
 
     public override void EndState()
     {
-
+        Debug.Log("Found one :)");
     }
 
     public override bool IsOver()

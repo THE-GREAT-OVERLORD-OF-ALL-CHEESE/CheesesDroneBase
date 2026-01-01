@@ -14,11 +14,13 @@ public class State_TerminalFlight : State_TargetAttackBase
     public float hBias;
     public float vBias;
     public float maxRange;
+    public float minRange;
 
-    public State_TerminalFlight(FPVDroneAI droneAI, float hBias, float vBias, float maxRange) : base(droneAI)
+    public State_TerminalFlight(FPVDroneAI droneAI, float hBias, float vBias, float minRange, float maxRange) : base(droneAI)
     {
         this.hBias = hBias;
         this.vBias = vBias;
+        this.minRange = minRange;
         this.maxRange = maxRange;
     }
 
@@ -28,7 +30,7 @@ public class State_TerminalFlight : State_TargetAttackBase
             return false;
 
         Vector3 offset = droneAI.target.position - droneAI.pilot.flightModel.tf.position;
-        return offset.magnitude < maxRange;
+        return offset.magnitude < maxRange && offset.magnitude > minRange;
     }
 
     public override void StartState()
@@ -43,6 +45,11 @@ public class State_TerminalFlight : State_TargetAttackBase
             return;
 
         droneAI.pilot.FlyTowardsPos(droneAI.target.position, Mathf.Max(droneAI.pilot.flightModel.rb.velocity.magnitude + 5f, 10f));
+        Vector3 offset = droneAI.target.position - droneAI.pilot.flightModel.tf.position;
+        if (offset.magnitude < minRange && Vector3.Dot(droneAI.pilot.flightModel.rb.velocity, offset) < 0)
+        {
+            droneAI.fuse.Explode();
+        }
     }
 
     public override void EndState()

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace CheeseMods.CheeseDroneBase.Components;
 
-public class SimpleQuadFlightModel : MonoBehaviour
+public class SimpleMultirotorFlightModel : MonoBehaviour
 {
     public Rigidbody rb;
     public Transform tf;
@@ -16,7 +16,7 @@ public class SimpleQuadFlightModel : MonoBehaviour
     public float RPM { get; private set; }
 
     private float throttle;
-    private Vector3 pyr;
+    public Vector3 pyr { get; private set; }
     private bool broken;
 
     private void Start()

@@ -2,9 +2,9 @@ using UnityEngine;
 
 namespace CheeseMods.CheeseDroneBase.Components;
 
-public class SimpleQuadAudio : MonoBehaviour
+public class SimpleMultirotorAudio : MonoBehaviour
 {
-    public SimpleQuadFlightModel fm;
+    public SimpleMultirotorFlightModel fm;
     public AudioSource source;
 
     public AnimationCurve pitchCurve;
