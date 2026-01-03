@@ -10,5 +10,10 @@
 
         // goal memory
         public bool takeOff;
+
+        public Waypoint waypoint;
+        public float waypointAlt = 50f;
+
+        public FollowPath path;
     }
 }

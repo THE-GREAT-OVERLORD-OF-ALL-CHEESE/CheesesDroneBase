@@ -13,6 +13,8 @@ public class State_HoverAtBase : AITryState
 
     public MultiRotorDroneAI droneAI;
 
+    private float timer;
+
     public State_HoverAtBase(MultiRotorDroneAI droneAI)
     {
         this.droneAI = droneAI;
@@ -26,11 +28,13 @@ public class State_HoverAtBase : AITryState
     public override void StartState()
     {
         Debug.Log("Hover at base");
+        timer = 0f;
     }
 
     public override void UpdateState()
     {
-        droneAI.pilot.FlyPos(VTMapManager.GlobalToWorldPoint(droneAI.droneBlackboard.basePosition) + Vector3.up * 50f, 0.25f);
+        droneAI.pilot.FlyPos(VTMapManager.GlobalToWorldPoint(droneAI.droneBlackboard.basePosition) + Vector3.up * 50f, Vector3.zero, 0.25f);
+        timer += Time.fixedDeltaTime;
     }
 
     public override void EndState()
@@ -40,6 +44,6 @@ public class State_HoverAtBase : AITryState
 
     public override bool IsOver()
     {
-        return false;
+        return timer > 5f;
     }
 }

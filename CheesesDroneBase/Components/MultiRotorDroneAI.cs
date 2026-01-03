@@ -1,12 +1,14 @@
 using CheeseMods.CheeseDroneBase;
 using CheeseMods.CheesesDroneBase.AIStates;
+using CheeseMods.CheesesDroneBase.AIStates.FPV;
 using CheeseMods.CheesesDroneBase.AIStates.MultiRotorDrone;
+using CheesesDroneBase.AIStates.MultiRotorDrone;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace CheeseMods.CheesesDroneBase.Components;
 
-public class MultiRotorDroneAI : MonoBehaviour
+public class MultiRotorDroneAI : MonoBehaviour, IEngageEnemies
 {
     public VisualTargetFinder targetFinder;
     public MultirotorPilot pilot;
@@ -14,6 +16,12 @@ public class MultiRotorDroneAI : MonoBehaviour
 
     private AITryState states;
     public MultiRotorDroneBlackboard droneBlackboard = new MultiRotorDroneBlackboard();
+    public MultiRotorDroneTargetBlackboard droneTargetBlackboard;
+
+    private void Awake()
+    {
+        droneTargetBlackboard = new MultiRotorDroneTargetBlackboard(targetFinder);
+    }
 
     private void Start()
     {
@@ -69,14 +77,15 @@ public class MultiRotorDroneAI : MonoBehaviour
     protected virtual AITryState GenerateStates()
     {
         return new State_Sequence(
-            new List<AITryState>
-            {
+            new List<AITryState> {
                 new State_WaitForLaunch(this),
                 new State_TakeOff(this),
-                new State_HoverAtBase(this)
-                //new State_FindTarget(this),
-                //new State_FlyToTarget(this, 0.0f, 0.1f, 200f, 2500f),
-                //new State_TerminalFlight(this, 0.1f, 0.1f, 10f, 250f),
+                new State_FlyToTarget(this, 0.0f, 0.1f, 1500f, 2500f),
+                new State_ScoutTarget(this, 1000f, 500f),
+                new State_ScoutLKP(this, 1000f, 500f),
+                new State_FollowPath(this),
+                new State_HoverAtWaypoint(this),
+                new State_HoverAtBase(this),
             },
             "States",
             0f,
@@ -86,6 +95,7 @@ public class MultiRotorDroneAI : MonoBehaviour
 
     private void FixedUpdate()
     {
+        droneTargetBlackboard.Update(Time.fixedDeltaTime);
         states.UpdateState();
 
         /*
@@ -102,5 +112,14 @@ public class MultiRotorDroneAI : MonoBehaviour
             }
         }
         */
+    }
+
+    public void SetEngageEnemies(bool engage)
+    {
+        if (droneTargetBlackboard == null)
+        {
+            droneTargetBlackboard = new MultiRotorDroneTargetBlackboard(targetFinder);
+        }
+        droneTargetBlackboard.engageEnemies = engage;
     }
 }

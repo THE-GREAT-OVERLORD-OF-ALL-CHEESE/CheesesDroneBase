@@ -1,0 +1,57 @@
+﻿using CheeseMods.CheesesDroneBase.AIStates;
+using CheeseMods.CheesesDroneBase.Components;
+using UnityEngine;
+
+namespace CheesesDroneBase.AIStates.MultiRotorDrone;
+
+public class State_ScoutLKP : AITryState
+{
+    public override string Name => "ScoutLKP";
+
+    public override float WarmUp => 0.5f;
+
+    public override float CoolDown => 0.5f;
+
+    public MultiRotorDroneAI droneAI;
+
+    public float scoutDistance = 100f;
+    public float scoutAltitude = 50f;
+
+    public State_ScoutLKP(MultiRotorDroneAI droneAI, float scoutDistance, float scoutAltitude)
+    {
+        this.droneAI = droneAI;
+        this.scoutDistance = scoutDistance;
+        this.scoutAltitude = scoutAltitude;
+    }
+
+    public override bool CanStart()
+    {
+        return !droneAI.droneTargetBlackboard.canSeeTarget && droneAI.droneTargetBlackboard.haveLastKnownPosition;
+    }
+
+    public override void StartState()
+    {
+        Debug.Log("Flying to target les goo");
+    }
+
+    public override void UpdateState()
+    {
+        Vector3 lastKnownPos = VTMapManager.GlobalToWorldPoint(droneAI.droneTargetBlackboard.lastKnownPos);
+        Vector3 offset = lastKnownPos - droneAI.pilot.flightModel.tf.position;
+        offset.y = 0;
+        Vector3 targetPos = offset.normalized * -scoutDistance + lastKnownPos + Vector3.up * scoutAltitude;
+
+        droneAI.pilot.FlyPos(targetPos, Vector3.zero, 0.25f);
+        droneAI.pilot.LookDir(offset);
+    }
+
+    public override void EndState()
+    {
+        Debug.Log("Found a target, reenage");
+    }
+
+    public override bool IsOver()
+    {
+        return droneAI.droneTargetBlackboard.canSeeTarget;
+    }
+}

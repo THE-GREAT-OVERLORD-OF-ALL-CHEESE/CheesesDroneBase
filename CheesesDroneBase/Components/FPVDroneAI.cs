@@ -1,6 +1,7 @@
 using CheeseMods.CheesesDroneBase.AIStates;
 using CheeseMods.CheesesDroneBase.AIStates.FPV;
 using CheeseMods.CheesesDroneBase.AIStates.MultiRotorDrone;
+using CheesesDroneBase.AIStates.MultiRotorDrone;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,6 +9,7 @@ namespace CheeseMods.CheesesDroneBase.Components;
 
 public class FPVDroneAI : MultiRotorDroneAI
 {
+    /*
     public abstract class FPVDroneState
     {
         public abstract void FixedUpate(FPVDroneAI drone);
@@ -98,7 +100,6 @@ public class FPVDroneAI : MultiRotorDroneAI
         }
     }
 
-    /*
     public class FlyToSideAttack : FPVDroneState
     {
         private Vector3 targetPos;
@@ -117,7 +118,6 @@ public class FPVDroneAI : MultiRotorDroneAI
             return offset.magnitude < 10f && drone.pilot.flightModel.rb.velocity.magnitude < 10f;
         }
     }
-    */
 
     public class ArmFuse : FPVDroneState
     {
@@ -144,8 +144,7 @@ public class FPVDroneAI : MultiRotorDroneAI
             return false;
         }
     }
-
-    internal Actor target;
+    */
 
     private AITryState states;
 
@@ -160,9 +159,12 @@ public class FPVDroneAI : MultiRotorDroneAI
             new List<AITryState> {
                 new State_WaitForLaunch(this),
                 new State_TakeOff(this),
-                new State_FindTarget(this),
                 new State_FlyToTarget(this, 0.0f, 0.1f, 200f, 2500f),
                 new State_TerminalFlight(this, 0.1f, 0.1f, 10f, 250f),
+                new State_ScoutLKP(this, 100f, 100f),
+                new State_FollowPath(this),
+                new State_HoverAtWaypoint(this),
+                new State_HoverAtBase(this),
             },
             "States",
             0f,
