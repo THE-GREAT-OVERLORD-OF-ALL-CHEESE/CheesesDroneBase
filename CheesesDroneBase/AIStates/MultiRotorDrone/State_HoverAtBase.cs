@@ -1,8 +1,7 @@
-﻿using CheeseMods.CheesesDroneBase.AIStates;
-using CheeseMods.CheesesDroneBase.Components;
+﻿using CheeseMods.CheesesDroneBase.Components;
 using UnityEngine;
 
-namespace CheesesDroneBase.AIStates.MultiRotorDrone;
+namespace CheeseMods.CheesesDroneBase.AIStates.MultiRotorDrone;
 
 public class State_HoverAtBase : AITryState
 {
