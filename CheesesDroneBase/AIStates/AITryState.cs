@@ -1,4 +1,4 @@
-﻿namespace CheeseMods.CheeseDroneBase.AIStates;
+﻿namespace CheeseMods.CheesesDroneBase.AIStates;
 
 public abstract class AITryState
 {

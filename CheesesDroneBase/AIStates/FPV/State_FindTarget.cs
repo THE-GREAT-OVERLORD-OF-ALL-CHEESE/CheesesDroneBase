@@ -1,7 +1,7 @@
-﻿using CheeseMods.CheeseDroneBase.Components;
+﻿using CheeseMods.CheesesDroneBase.Components;
 using UnityEngine;
 
-namespace CheeseMods.CheeseDroneBase.AIStates.FPV;
+namespace CheeseMods.CheesesDroneBase.AIStates.FPV;
 
 public class State_FindTarget : AITryState
 {
@@ -30,7 +30,7 @@ public class State_FindTarget : AITryState
 
     public override void UpdateState()
     {
-        droneAI.pilot.FlyPos(VTMapManager.GlobalToWorldPoint(droneAI.basePosition) + Vector3.up * 50f, 0.25f);
+        droneAI.pilot.FlyPos(VTMapManager.GlobalToWorldPoint(droneAI.droneBlackboard.basePosition) + Vector3.up * 50f, 0.25f);
 
         if (droneAI.targetFinder.targetsSeen.Count > 0)
         {

@@ -2,7 +2,7 @@
 using System.Linq;
 using UnityEngine;
 
-namespace CheeseMods.CheeseDroneBase.AIStates;
+namespace CheeseMods.CheesesDroneBase.AIStates;
 
 public class State_Sequence : AITryState
 {

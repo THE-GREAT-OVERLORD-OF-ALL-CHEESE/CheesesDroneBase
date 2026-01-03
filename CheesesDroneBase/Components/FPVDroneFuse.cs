@@ -1,7 +1,7 @@
 using System.Linq;
 using UnityEngine;
 
-namespace CheeseMods.CheeseDroneBase.Components;
+namespace CheeseMods.CheesesDroneBase.Components;
 
 public class FPVDroneFuse : MonoBehaviour
 {

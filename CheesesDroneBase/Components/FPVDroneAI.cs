@@ -1,11 +1,12 @@
-using CheeseMods.CheeseDroneBase.AIStates;
-using CheeseMods.CheeseDroneBase.AIStates.FPV;
+using CheeseMods.CheesesDroneBase.AIStates;
+using CheeseMods.CheesesDroneBase.AIStates.FPV;
+using CheesesDroneBase.AIStates.MultiRotorDrone;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CheeseMods.CheeseDroneBase.Components;
+namespace CheeseMods.CheesesDroneBase.Components;
 
-public class FPVDroneAI : MonoBehaviour
+public class FPVDroneAI : MultiRotorDroneAI
 {
     public abstract class FPVDroneState
     {
@@ -144,9 +145,6 @@ public class FPVDroneAI : MonoBehaviour
         }
     }
 
-    public VisualTargetFinder targetFinder;
-    public MultirotorPilot pilot;
-    public FPVDroneFuse fuse;
     internal Actor target;
 
     private AITryState states;
@@ -156,61 +154,9 @@ public class FPVDroneAI : MonoBehaviour
     private int stateId;
     public int overrideStrat = -1;
 
-    internal bool activated;
-
-    internal Vector3D basePosition;
-    internal bool landed = true;
-
-    private void Start()
+    protected override AITryState GenerateStates()
     {
-        landed = true;
-        basePosition = VTMapManager.WorldToGlobalPoint(pilot.flightModel.tf.position);
-        /*
-        if (strategies == null)
-        {
-            strategies = new List<List<FPVDroneState>>{
-                new List<FPVDroneState>
-                {
-                    new WaitRandom(),
-                    new Launch(),
-                    new FlyTo(100f, 0.1f, 0f),
-                    new ArmFuse(),
-                    new Terminal()
-                },
-                new List<FPVDroneState>
-                {
-                    new WaitRandom(),
-                    new Launch(),
-                    new FlyTo(200f, 0.2f, 0f),
-                    new ArmFuse(),
-                    new FlyToTopAttack(),
-                    new Terminal()
-                },
-                new List<FPVDroneState>
-                {
-                    new WaitRandom(),
-                    new Launch(),
-                    new FlyTo(100f, 0.1f, 0.2f),
-                    new ArmFuse(),
-                    new FlyToSideAttack(),
-                    new Terminal()
-                },
-                new List<FPVDroneState>
-                {
-                    new WaitRandom(),
-                    new Launch(),
-                    new FlyTo(100f, 0.1f, -0.2f),
-                    new ArmFuse(),
-                    new FlyToSideAttack(),
-                    new Terminal()
-                }
-            };
-        }
-        states = strategies[Random.Range(0, strategies.Count)];
-        if (overrideStrat >= 0)
-            states = strategies[overrideStrat];
-        */
-        states = new State_Sequence(
+        return new State_Sequence(
             new List<AITryState> {
                 new State_WaitForLaunch(this),
                 new State_TakeOff(this),
@@ -221,26 +167,6 @@ public class FPVDroneAI : MonoBehaviour
             "States",
             0f,
             0f
-        );  
-    }
-
-    private void FixedUpdate()
-    {
-        states.UpdateState();
-
-        /*
-        if (!activated || done)
-            return;
-
-        states[stateId].FixedUpate(this);
-        if (states[stateId].IsDone(this))
-        {
-            stateId++;
-            if (stateId > states.Count)
-            {
-                done = true;
-            }
-        }
-        */
+        );
     }
 }

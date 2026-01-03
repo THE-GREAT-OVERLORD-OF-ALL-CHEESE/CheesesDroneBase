@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CheeseMods.CheeseDroneBase.AIStates;
+namespace CheeseMods.CheesesDroneBase.AIStates;
 
 public class State_ConditionalSequence : State_Sequence
 {

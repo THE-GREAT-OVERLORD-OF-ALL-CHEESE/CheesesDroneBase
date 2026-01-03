@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace CheeseMods.CheeseDroneBase.Components;
+namespace CheeseMods.CheesesDroneBase.Components;
 
 public class SimpleMultirotorRotorAnimator : MonoBehaviour
 {

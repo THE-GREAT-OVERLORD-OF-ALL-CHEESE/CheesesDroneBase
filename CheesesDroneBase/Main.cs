@@ -2,7 +2,7 @@
 using ModLoader.Framework.Attributes;
 using UnityEngine;
 
-namespace CheeseMods.CheeseDroneBase;
+namespace CheeseMods.CheesesDroneBase;
 
 [ItemId("cheese.dronebase")]
 public class Main : VtolMod

@@ -1,6 +1,7 @@
-﻿using CheeseMods.CheeseDroneBase.Components;
+﻿using CheeseMods.CheesesDroneBase.AIStates;
+using CheeseMods.CheesesDroneBase.Components;
 
-namespace CheeseMods.CheeseDroneBase.AIStates.FPV;
+namespace CheesesDroneBase.AIStates.MultiRotorDrone;
 
 public class State_WaitForLaunch : AITryState
 {
@@ -10,16 +11,16 @@ public class State_WaitForLaunch : AITryState
 
     public override float CoolDown => 0.5f;
 
-    public FPVDroneAI droneAI;
+    public MultiRotorDroneAI droneAI;
 
-    public State_WaitForLaunch(FPVDroneAI droneAI)
+    public State_WaitForLaunch(MultiRotorDroneAI droneAI)
     {
         this.droneAI = droneAI;
     }
 
     public override bool CanStart()
     {
-        return !droneAI.activated;
+        return !droneAI.droneBlackboard.takeOff;
     }
 
     public override void StartState()
@@ -39,6 +40,6 @@ public class State_WaitForLaunch : AITryState
 
     public override bool IsOver()
     {
-        return droneAI.activated;
+        return droneAI.droneBlackboard.takeOff;
     }
 }

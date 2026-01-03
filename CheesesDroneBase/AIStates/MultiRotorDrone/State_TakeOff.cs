@@ -1,7 +1,8 @@
-﻿using CheeseMods.CheeseDroneBase.Components;
+﻿using CheeseMods.CheesesDroneBase.AIStates;
+using CheeseMods.CheesesDroneBase.Components;
 using UnityEngine;
 
-namespace CheeseMods.CheeseDroneBase.AIStates.FPV;
+namespace CheesesDroneBase.AIStates.MultiRotorDrone;
 
 public class State_TakeOff : AITryState
 {
@@ -11,12 +12,12 @@ public class State_TakeOff : AITryState
 
     public override float CoolDown => 0.5f;
 
-    public FPVDroneAI droneAI;
+    public MultiRotorDroneAI droneAI;
     private float randomStartUpTime;
 
     private float launchTimer;
 
-    public State_TakeOff(FPVDroneAI droneAI)
+    public State_TakeOff(MultiRotorDroneAI droneAI)
     {
         this.droneAI = droneAI;
     }
@@ -24,12 +25,12 @@ public class State_TakeOff : AITryState
     public override bool CanStart()
     {
         randomStartUpTime = Random.value * 5f;
-        return droneAI.landed;
+        return droneAI.droneBlackboard.landed;
     }
 
     public override void StartState()
     {
-        droneAI.landed = false;
+        droneAI.droneBlackboard.landed = false;
         launchTimer = 2f;
         Debug.Log("waited randomly, time to launch");
     }

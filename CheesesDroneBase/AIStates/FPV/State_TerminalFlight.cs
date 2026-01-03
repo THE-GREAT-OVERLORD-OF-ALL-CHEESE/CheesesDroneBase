@@ -1,7 +1,7 @@
-﻿using CheeseMods.CheeseDroneBase.Components;
+﻿using CheeseMods.CheesesDroneBase.Components;
 using UnityEngine;
 
-namespace CheeseMods.CheeseDroneBase.AIStates.FPV;
+namespace CheeseMods.CheesesDroneBase.AIStates.FPV;
 
 public class State_TerminalFlight : State_TargetAttackBase
 {

@@ -1,6 +1,6 @@
-﻿using CheeseMods.CheeseDroneBase.Components;
+﻿using CheeseMods.CheesesDroneBase.Components;
 
-namespace CheeseMods.CheeseDroneBase.AIStates.FPV;
+namespace CheeseMods.CheesesDroneBase.AIStates.FPV;
 
 public abstract class State_TargetAttackBase : AITryState
 {
