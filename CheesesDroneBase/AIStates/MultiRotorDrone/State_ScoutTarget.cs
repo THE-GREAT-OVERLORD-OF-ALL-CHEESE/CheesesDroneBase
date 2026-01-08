@@ -16,6 +16,9 @@ public class State_ScoutTarget : AITryState
     public float scoutDistance = 1000f;
     public float scoutAltitude = 500f;
 
+    private float scoutDistOffset;
+    private float scoutAltOffset;
+
     public State_ScoutTarget(MultiRotorDroneAI droneAI, float scoutDistance, float scoutAltitude)
     {
         this.droneAI = droneAI;
@@ -30,7 +33,8 @@ public class State_ScoutTarget : AITryState
 
     public override void StartState()
     {
-
+        scoutDistOffset = scoutDistance * Random.Range(-0.1f, 0.1f);
+        scoutAltOffset = scoutAltitude * Random.Range(-0.1f, 0.1f);
     }
 
     public override void UpdateState()

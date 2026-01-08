@@ -2,10 +2,12 @@ using UnityEngine;
 
 namespace CheeseMods.CheesesDroneBase.Components;
 
-public class SimpleMultirotorFlightModel : MonoBehaviour
+public class SimpleMultirotorFlightModel : MonoBehaviour, IWindReceiver
 {
     public Rigidbody rb;
     public Transform tf;
+
+    private Vector3 windVel;
 
     public float maxTwr;
     public float spoolSpeed;
@@ -32,7 +34,7 @@ public class SimpleMultirotorFlightModel : MonoBehaviour
         }
 
         RPM += Mathf.Clamp(throttle - RPM, -spoolSpeed * Time.fixedDeltaTime, spoolSpeed * Time.fixedDeltaTime);
-        rb.AddForce(tf.up * RPM * maxTwr * rb.mass * 9.81f);
+        rb.AddForce(tf.up * RPM * maxTwr * 9.81f + CurrentDrag(), ForceMode.Acceleration);
 
         Vector3 localAngularVel = tf.InverseTransformDirection(rb.angularVelocity);
 
@@ -51,5 +53,21 @@ public class SimpleMultirotorFlightModel : MonoBehaviour
     public void BreakQuad()
     {
         broken = true;
+    }
+
+    public Vector3 CurrentDrag()
+    {
+        Vector3 airSpeed = rb.velocity - windVel;
+        return airSpeed * airSpeed.magnitude * -0.001f;
+    }
+
+    public void SetWind(Vector3 w)
+    {
+        windVel = w;
+    }
+
+    public Vector3 GetPosition()
+    {
+        return tf.position;
     }
 }

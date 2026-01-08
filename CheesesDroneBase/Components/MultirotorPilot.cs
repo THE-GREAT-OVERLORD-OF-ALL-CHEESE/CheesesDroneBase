@@ -56,7 +56,7 @@ public class MultirotorPilot : MonoBehaviour
 
     public void FlyAcceleration(Vector3 acceleration)
     {
-        Vector3 targetThrust = Vector3.ClampMagnitude(acceleration, maxAcceleration) + Vector3.up * 9.81f;
+        Vector3 targetThrust = Vector3.ClampMagnitude(acceleration, maxAcceleration) + Vector3.up * 9.81f - flightModel.CurrentDrag();
 
         float throttle = targetThrust.magnitude / (flightModel.maxTwr * 9.81f);
 

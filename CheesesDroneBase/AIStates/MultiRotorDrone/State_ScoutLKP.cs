@@ -17,6 +17,9 @@ public class State_ScoutLKP : AITryState
     public float scoutDistance = 100f;
     public float scoutAltitude = 50f;
 
+    private float scoutDistOffset;
+    private float scoutAltOffset;
+
     public State_ScoutLKP(MultiRotorDroneAI droneAI, float scoutDistance, float scoutAltitude)
     {
         this.droneAI = droneAI;
@@ -32,6 +35,8 @@ public class State_ScoutLKP : AITryState
     public override void StartState()
     {
         Debug.Log("Flying to target les goo");
+        scoutDistOffset = scoutDistance * Random.Range(-0.1f, 0.1f);
+        scoutAltOffset = scoutAltitude * Random.Range(-0.1f, 0.1f);
     }
 
     public override void UpdateState()
@@ -39,7 +44,7 @@ public class State_ScoutLKP : AITryState
         Vector3 lastKnownPos = VTMapManager.GlobalToWorldPoint(droneAI.droneTargetBlackboard.lastKnownPos);
         Vector3 offset = lastKnownPos - droneAI.pilot.flightModel.tf.position;
         offset.y = 0;
-        Vector3 targetPos = offset.normalized * -scoutDistance + lastKnownPos + Vector3.up * scoutAltitude;
+        Vector3 targetPos = offset.normalized * -(scoutDistance + scoutDistOffset) + lastKnownPos + Vector3.up * (scoutAltitude + scoutAltOffset);
 
         droneAI.pilot.FlyPos(targetPos, Vector3.zero, 0.25f);
         droneAI.pilot.LookDir(offset);

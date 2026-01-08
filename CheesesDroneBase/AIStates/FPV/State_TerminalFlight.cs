@@ -13,18 +13,16 @@ public class State_TerminalFlight : AITryState
 
     public FPVDroneAI droneAI;
 
-    public float hBias;
-    public float vBias;
     public float maxRange;
     public float minRange;
+    public float minAlt;
 
-    public State_TerminalFlight(FPVDroneAI droneAI, float hBias, float vBias, float minRange, float maxRange)
+    public State_TerminalFlight(FPVDroneAI droneAI, float minRange, float maxRange, float minAlt)
     {
         this.droneAI = droneAI;
-        this.hBias = hBias;
-        this.vBias = vBias;
         this.minRange = minRange;
         this.maxRange = maxRange;
+        this.minAlt = minAlt;
     }
 
     public override bool CanStart()
@@ -33,7 +31,7 @@ public class State_TerminalFlight : AITryState
             return false;
 
         Vector3 offset = droneAI.droneTargetBlackboard.target.position - droneAI.pilot.flightModel.tf.position;
-        return offset.magnitude < maxRange && offset.magnitude > minRange;
+        return offset.magnitude < maxRange && offset.magnitude > minRange && (Vector3.Angle(Vector3.up, -offset) < 80f || -offset.y > minAlt);
     }
 
     public override void StartState()
