@@ -7,9 +7,9 @@ public class State_TerminalFlight : AITryState
 {
     public override string Name => "Terminal Flight";
 
-    public override float WarmUp => 0.5f;
+    public override float WarmUp => 0.25f;
 
-    public override float CoolDown => 0.5f;
+    public override float CoolDown => 0.25f;
 
     public FPVDroneAI droneAI;
 
@@ -36,8 +36,7 @@ public class State_TerminalFlight : AITryState
 
     public override void StartState()
     {
-        Debug.Log("Explody crashy time");
-        droneAI.fuse.Arm();
+
     }
 
     public override void UpdateState()
@@ -60,8 +59,7 @@ public class State_TerminalFlight : AITryState
 
     public override void EndState()
     {
-        Debug.Log("i've changed my mind...");
-        droneAI.fuse.Disarm();
+
     }
 
     public override bool IsOver()

@@ -7,9 +7,9 @@ public class State_GoAround : AITryState
 {
     public override string Name => "Go Around";
 
-    public override float WarmUp => 0.5f;
+    public override float WarmUp => 0.25f;
 
-    public override float CoolDown => 0.5f;
+    public override float CoolDown => 0.25f;
 
     public FPVDroneAI droneAI;
 
@@ -32,17 +32,23 @@ public class State_GoAround : AITryState
 
     public override void StartState()
     {
-        Debug.Log("Go around");
+
     }
 
     public override void UpdateState()
     {
-        droneAI.pilot.FlyVel(Vector3.up * 20f);
+        Vector3 dir = droneAI.pilot.flightModel.rb.velocity.normalized;
+        dir.y = 0f;
+
+        Vector3 right = Vector3.Cross(Vector3.up, dir);
+        dir = Quaternion.AngleAxis(30f, right) * dir;
+
+        droneAI.pilot.FlyVel(dir.normalized * 50f);
     }
 
     public override void EndState()
     {
-        Debug.Log("Thats far enough...");
+
     }
 
     public override bool IsOver()

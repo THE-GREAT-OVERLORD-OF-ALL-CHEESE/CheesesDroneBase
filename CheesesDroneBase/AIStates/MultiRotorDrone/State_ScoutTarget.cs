@@ -7,9 +7,9 @@ public class State_ScoutTarget : AITryState
 {
     public override string Name => "ScoutLKP";
 
-    public override float WarmUp => 0.5f;
+    public override float WarmUp => 0.25f;
 
-    public override float CoolDown => 0.5f;
+    public override float CoolDown => 0.25f;
 
     public MultiRotorDroneAI droneAI;
 

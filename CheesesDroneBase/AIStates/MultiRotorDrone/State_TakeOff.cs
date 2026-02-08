@@ -9,7 +9,7 @@ public class State_TakeOff : AITryState
 
     public override float WarmUp => randomStartUpTime;
 
-    public override float CoolDown => 0.5f;
+    public override float CoolDown => 0.25f;
 
     public MultiRotorDroneAI droneAI;
     private float randomStartUpTime;
@@ -31,7 +31,6 @@ public class State_TakeOff : AITryState
     {
         droneAI.droneBlackboard.landed = false;
         launchTimer = 2f;
-        Debug.Log("waited randomly, time to launch");
     }
 
     public override void UpdateState()
@@ -42,7 +41,7 @@ public class State_TakeOff : AITryState
 
     public override void EndState()
     {
-        Debug.Log("Done launching lets goo");
+
     }
 
     public override bool IsOver()

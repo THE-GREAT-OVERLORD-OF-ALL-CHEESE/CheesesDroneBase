@@ -58,7 +58,7 @@ public class SimpleMultirotorFlightModel : MonoBehaviour, IWindReceiver
     public Vector3 CurrentDrag()
     {
         Vector3 airSpeed = rb.velocity - windVel;
-        return airSpeed * airSpeed.magnitude * -0.001f;
+        return airSpeed * airSpeed.magnitude * -drag;
     }
 
     public void SetWind(Vector3 w)

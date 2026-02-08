@@ -1,5 +1,4 @@
 ﻿using CheeseMods.CheesesDroneBase.Components;
-using System;
 using UnityEngine;
 
 namespace CheeseMods.CheesesDroneBase.AIStates.MultiRotorDrone;
@@ -8,9 +7,9 @@ public class State_FollowPath : AITryState
 {
     public override string Name => "Hover at Waypoint";
 
-    public override float WarmUp => 0.5f;
+    public override float WarmUp => 0.25f;
 
-    public override float CoolDown => 0.5f;
+    public override float CoolDown => 0.25f;
 
     public MultiRotorDroneAI droneAI;
 
@@ -26,7 +25,7 @@ public class State_FollowPath : AITryState
 
     public override void StartState()
     {
-        Debug.Log("Follow path");
+
     }
 
     public override void UpdateState()

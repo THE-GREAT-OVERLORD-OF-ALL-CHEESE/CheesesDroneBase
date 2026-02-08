@@ -8,12 +8,15 @@ namespace CheeseMods.CheeseDroneBase
         public bool engageEnemies;
 
         public VisualTargetFinder targetFinder;
+
         public bool canSeeTarget;
         public Actor target;
+
         public bool haveLastKnownPosition;
         public Vector3D lastKnownPos;
 
-        public float forgetTime;
+        public float timeSinceLastSeenEnemy;
+        private float forgetTime;
 
         public MultiRotorDroneTargetBlackboard(VisualTargetFinder targetFinder)
         {
@@ -34,9 +37,11 @@ namespace CheeseMods.CheeseDroneBase
                 // No target, keep looking
                 canSeeTarget = false;
                 target = null;
+                timeSinceLastSeenEnemy += deltaTime;
                 if (targetFinder.targetsSeen.Count > 0)
                 {
                     canSeeTarget = true;
+                    timeSinceLastSeenEnemy = 0;
                     target = targetFinder.targetsSeen[Random.Range(0, targetFinder.targetsSeen.Count)];
                 }
             }
@@ -64,6 +69,11 @@ namespace CheeseMods.CheeseDroneBase
                     }
                 }
             }
+        }
+
+        public void ForgetLKP()
+        {
+            haveLastKnownPosition = false;
         }
     }
 }

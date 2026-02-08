@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace CheesesDroneBase.AIStates.MultiRotorDrone;
 
-public class State_ScoutLKP : AITryState
+public class State_FollowUnit : AITryState
 {
     public override string Name => "ScoutLKP";
 
@@ -20,31 +20,20 @@ public class State_ScoutLKP : AITryState
     private float scoutDistOffset;
     private float scoutAltOffset;
 
-    private float minTime;
-    private float maxTime;
-
-    public State_ScoutLKP(MultiRotorDroneAI droneAI, float scoutDistance, float scoutAltitude, float minTime, float maxTime)
+    public State_FollowUnit(MultiRotorDroneAI droneAI, float scoutDistance, float scoutAltitude)
     {
         this.droneAI = droneAI;
-
         this.scoutDistance = scoutDistance;
         this.scoutAltitude = scoutAltitude;
-
-        this.minTime = minTime;
-        this.maxTime = maxTime;
     }
 
     public override bool CanStart()
     {
-        return !droneAI.droneTargetBlackboard.canSeeTarget
-            && droneAI.droneTargetBlackboard.haveLastKnownPosition
-            && droneAI.droneTargetBlackboard.timeSinceLastSeenEnemy > minTime
-            && droneAI.droneTargetBlackboard.timeSinceLastSeenEnemy < maxTime;
+        return !droneAI.droneTargetBlackboard.canSeeTarget && droneAI.droneTargetBlackboard.haveLastKnownPosition;
     }
 
     public override void StartState()
     {
-        Debug.Log("Flying to target les goo");
         scoutDistOffset = scoutDistance * Random.Range(-0.1f, 0.1f);
         scoutAltOffset = scoutAltitude * Random.Range(-0.1f, 0.1f);
     }
@@ -62,13 +51,11 @@ public class State_ScoutLKP : AITryState
 
     public override void EndState()
     {
-        Debug.Log("Found a target, reenage");
+
     }
 
     public override bool IsOver()
     {
-        return droneAI.droneTargetBlackboard.canSeeTarget
-            || droneAI.droneTargetBlackboard.timeSinceLastSeenEnemy < minTime
-            || droneAI.droneTargetBlackboard.timeSinceLastSeenEnemy > maxTime;
+        return droneAI.droneTargetBlackboard.canSeeTarget;
     }
 }

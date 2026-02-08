@@ -7,9 +7,9 @@ public class State_HoverAtBase : AITryState
 {
     public override string Name => "Find Target";
 
-    public override float WarmUp => 0.5f;
+    public override float WarmUp => 0.25f;
 
-    public override float CoolDown => 0.5f;
+    public override float CoolDown => 0.25f;
 
     public MultiRotorDroneAI droneAI;
 
@@ -27,7 +27,6 @@ public class State_HoverAtBase : AITryState
 
     public override void StartState()
     {
-        Debug.Log("Hover at base");
         timer = 0f;
     }
 

@@ -1,16 +1,15 @@
-﻿using CheeseMods.CheesesDroneBase.AIStates;
-using CheeseMods.CheesesDroneBase.Components;
+﻿using CheeseMods.CheesesDroneBase.Components;
 using UnityEngine;
 
-namespace CheesesDroneBase.AIStates.MultiRotorDrone;
+namespace CheeseMods.CheesesDroneBase.AIStates.MultiRotorDrone;
 
 public class State_FlyToTarget : AITryState
 {
     public override string Name => "FlyToTarget";
 
-    public override float WarmUp => 0.5f;
+    public override float WarmUp => 0.25f;
 
-    public override float CoolDown => 0.5f;
+    public override float CoolDown => 0.25f;
 
     public MultiRotorDroneAI droneAI;
 
@@ -42,7 +41,6 @@ public class State_FlyToTarget : AITryState
 
     public override void StartState()
     {
-        Debug.Log("Flying to target les goo");
         hBias2 = Random.Range(-0.1f, 0.1f);
         vBias2 = Random.Range(-0.1f, 0.1f);
     }
@@ -63,14 +61,7 @@ public class State_FlyToTarget : AITryState
 
     public override void EndState()
     {
-        if (droneAI.droneTargetBlackboard.target == null || !droneAI.droneTargetBlackboard.canSeeTarget)
-        {
-            Debug.Log("Lost target, wuh oh");
-        }
-        else
-        {
-            Debug.Log("Damn we look kinda close now");
-        }
+
     }
 
     public override bool IsOver()

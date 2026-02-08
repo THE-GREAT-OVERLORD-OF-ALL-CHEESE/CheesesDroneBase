@@ -9,160 +9,70 @@ namespace CheeseMods.CheesesDroneBase.Components;
 
 public class FPVDroneAI : MultiRotorDroneAI
 {
-    /*
-    public abstract class FPVDroneState
-    {
-        public abstract void FixedUpate(FPVDroneAI drone);
-        public abstract bool IsDone(FPVDroneAI drone);
-    }
-
-    public class WaitRandom : FPVDroneState
-    {
-        private float timer;
-
-        public WaitRandom()
-        {
-            timer = Random.value * 5f;
-        }
-
-        public override void FixedUpate(FPVDroneAI drone)
-        {
-            timer -= Time.fixedDeltaTime;
-        }
-
-        public override bool IsDone(FPVDroneAI drone)
-        {
-            return timer < 0;
-        }
-    }
-
-    public class Launch : FPVDroneState
-    {
-        private float timer = 2f;
-        private float launchSpeed = 10f;
-
-        public override void FixedUpate(FPVDroneAI drone)
-        {
-            timer -= Time.fixedDeltaTime;
-            drone.pilot.FlyVel(Vector3.up * launchSpeed);
-        }
-
-        public override bool IsDone(FPVDroneAI drone)
-        {
-            return timer < 0;
-        }
-    }
-
-    public class FlyTo : FPVDroneState
-    {
-        public float range;
-        public float vBias;
-        public float hBias;
-
-        public FlyTo(float range, float veritcalBias, float horizontalBias)
-        {
-            this.range = range;
-            this.vBias = veritcalBias;
-            this.hBias = horizontalBias;
-        }
-
-        public override void FixedUpate(FPVDroneAI drone)
-        {
-            Vector3 offset = drone.target.position - drone.pilot.flightModel.tf.position;
-            drone.pilot.FlyTowardsPos(drone.target.position
-                + Vector3.up * offset.magnitude * vBias
-                + Vector3.Cross(Vector3.up, offset).normalized * offset.magnitude * hBias, 50f);
-        }
-
-        public override bool IsDone(FPVDroneAI drone)
-        {
-            Vector3 offset = drone.target.position - drone.pilot.flightModel.tf.position;
-            return offset.magnitude < range;
-        }
-    }
-
-    public class FlyToTopAttack : FPVDroneState
-    {
-        private Vector3 targetPos;
-        public override void FixedUpate(FPVDroneAI drone)
-        {
-            Vector3 offset = drone.target.position - drone.pilot.flightModel.tf.position;
-            offset.y = 0;
-            targetPos = offset.normalized * -20f + drone.target.position + Vector3.up * 20f;
-
-            drone.pilot.FlyPos(targetPos, 0.25f);
-        }
-
-        public override bool IsDone(FPVDroneAI drone)
-        {
-            Vector3 offset = targetPos - drone.pilot.flightModel.tf.position;
-            return offset.magnitude < 10f && drone.pilot.flightModel.rb.velocity.magnitude < 10f;
-        }
-    }
-
-    public class FlyToSideAttack : FPVDroneState
-    {
-        private Vector3 targetPos;
-        public override void FixedUpate(FPVDroneAI drone)
-        {
-            Vector3 offset = drone.target.position - drone.pilot.flightModel.tf.position;
-            Vector3 side = Mathf.Sign(Vector3.Dot(drone.target.right, offset)) * -drone.target.transform.right;
-            targetPos = side * 20f + drone.target.position + Vector3.up * 10f;
-
-            drone.pilot.FlyPos(targetPos, 0.25f);
-        }
-
-        public override bool IsDone(FPVDroneAI drone)
-        {
-            Vector3 offset = targetPos - drone.pilot.flightModel.tf.position;
-            return offset.magnitude < 10f && drone.pilot.flightModel.rb.velocity.magnitude < 10f;
-        }
-    }
-
-    public class ArmFuse : FPVDroneState
-    {
-        public override void FixedUpate(FPVDroneAI drone)
-        {
-            drone.fuse.Arm();
-        }
-
-        public override bool IsDone(FPVDroneAI drone)
-        {
-            return true;
-        }
-    }
-
-    public class Terminal : FPVDroneState
-    {
-        public override void FixedUpate(FPVDroneAI drone)
-        {
-            drone.pilot.FlyTowardsPos(drone.target.position, Mathf.Max(drone.pilot.flightModel.rb.velocity.magnitude + 5f, 10f));
-        }
-
-        public override bool IsDone(FPVDroneAI drone)
-        {
-            return false;
-        }
-    }
-    */
-
     private AITryState states;
-
-    //private List<List<FPVDroneState>> strategies;
-    //private List<FPVDroneState> states;
-    private int stateId;
-    public int overrideStrat = -1;
 
     protected override AITryState GenerateStates()
     {
         return new State_Sequence(
-            new List<AITryState> {
+            new List<AITryState>
+            {
                 new State_WaitForLaunch(this),
                 new State_TakeOff(this),
-                new State_FlyToTarget(this, 0.0f, 0.1f, 200f, 2500f),
-                new State_TerminalFlight(this, 30f, 250f, 10f),
+                new State_PickRandom(
+                    new List<AITryState>{
+                        new State_Sequence(
+                            new List<AITryState>
+                            {
+                                new State_FlyToTarget(this, 0.0f, 0.1f, 200f, 2500f),
+                                new State_TerminalFlight(this, 30f, 250f, 10f),
+                            },
+                            "Basic Attack",
+                            0f,
+                            0f
+                        ),
+                        new State_Sequence(
+                            new List<AITryState>
+                            {
+                                new State_FlyToTarget(this, -0.2f, 0.1f, 250f, 2500f),
+                                new State_FlyToSideAttack(this, 300f, 15f, 10f, 5f, 3f),
+                                new State_TerminalFlight(this, 10f, 100f, 5f),
+                            },
+                            "Side Attack Left",
+                            0f,
+                            0f
+                        ),
+                        new State_Sequence(
+                            new List<AITryState>
+                            {
+                                new State_FlyToTarget(this, 0.2f, 0.1f, 250f, 2500f),
+                                new State_FlyToSideAttack(this, 300f, 15f, 10f, 5f, 3f),
+                                new State_TerminalFlight(this, 10f, 100f, 5f),
+                            },
+                            "Side Attack Right",
+                            0f,
+                            0f
+                        ),
+                        new State_Sequence(
+                            new List<AITryState>
+                            {
+                                new State_FlyToTarget(this, 0.0f, 0.1f, 250f, 2500f),
+                                new State_FlyToTopAttack(this, 300f, 10f, 20f, 5f, 3f),
+                                new State_TerminalFlight(this, 10f, 100f, 10f),
+                            },
+                            "Top Attack",
+                            0f,
+                            0f
+                        )
+                    },
+                    "Random Attack",
+                    0f,
+                    0f
+                ),
                 new State_GoAround(this, 250f),
-                new State_ScoutLKP(this, 100f, 100f),
+                new State_ScoutLKP(this, 200f, 100f, 0f, 30f),
+                new State_ScoutLKP(this, 100f, 100f, 30f, 45f),
+                new State_ScoutLKP(this, 50f, 100f, 45f, 60),
+                new State_ForgetLKP(this),
                 new State_FollowPath(this),
                 new State_HoverAtWaypoint(this),
                 new State_HoverAtBase(this),

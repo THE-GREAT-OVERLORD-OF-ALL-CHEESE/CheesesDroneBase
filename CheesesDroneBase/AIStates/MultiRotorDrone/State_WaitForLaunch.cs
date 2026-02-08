@@ -6,9 +6,9 @@ public class State_WaitForLaunch : AITryState
 {
     public override string Name => "Waiting for launch";
 
-    public override float WarmUp => 0.5f;
+    public override float WarmUp => 0.25f;
 
-    public override float CoolDown => 0.5f;
+    public override float CoolDown => 0.25f;
 
     public MultiRotorDroneAI droneAI;
 
@@ -34,11 +34,12 @@ public class State_WaitForLaunch : AITryState
 
     public override void EndState()
     {
-
+        droneAI.droneBlackboard.takeOff = true;
     }
 
     public override bool IsOver()
     {
-        return droneAI.droneBlackboard.takeOff;
+        return droneAI.droneBlackboard.takeOff
+            || (droneAI.droneBlackboard.autolaunch && droneAI.droneTargetBlackboard.canSeeTarget);
     }
 }
