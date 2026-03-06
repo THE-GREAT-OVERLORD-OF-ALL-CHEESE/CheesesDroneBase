@@ -26,6 +26,11 @@ public class MultirotorPilot : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!VTScenario.isScenarioHost)
+        {
+            return;
+        }
+
         if (flying)
         {
             FlyAcceleration(targetAcceleration);

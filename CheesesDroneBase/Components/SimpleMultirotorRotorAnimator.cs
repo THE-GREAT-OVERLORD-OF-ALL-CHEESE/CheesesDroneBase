@@ -16,9 +16,9 @@ public class SimpleMultirotorRotorAnimator : MonoBehaviour
     private void Update()
     {
         float finalRpm = fm.RPM
-            + fm.pyr.x * pitchResponse
-            + fm.pyr.y * yawResponse
-            + fm.pyr.z * rollResponse;
+            + fm.PYR.x * pitchResponse
+            + fm.PYR.y * yawResponse
+            + fm.PYR.z * rollResponse;
 
         finalRpm = Mathf.Clamp01(finalRpm);
         finalRpm *= maxRPM * 6f;

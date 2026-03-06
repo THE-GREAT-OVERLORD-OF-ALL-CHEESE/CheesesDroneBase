@@ -31,6 +31,11 @@ public class FPVDroneFuse : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!VTScenario.isScenarioHost)
+        {
+            return;
+        }
+
         if (!fuseActive)
             return;
 
@@ -43,6 +48,11 @@ public class FPVDroneFuse : MonoBehaviour
 
     private void OnCollisionEnter(Collision col)
     {
+        if (!VTScenario.isScenarioHost)
+        {
+            return;
+        }
+
         if (Vector3.Dot(col.contacts.First().normal, flightModel.tf.up) < 0)
         {
             ActivateFuse();

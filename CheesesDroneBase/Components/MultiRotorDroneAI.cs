@@ -26,51 +26,6 @@ public class MultiRotorDroneAI : MonoBehaviour, IEngageEnemies
     private void Start()
     {
         droneBlackboard.basePosition = VTMapManager.WorldToGlobalPoint(pilot.flightModel.tf.position);
-        /*
-        if (strategies == null)
-        {
-            strategies = new List<List<FPVDroneState>>{
-                new List<FPVDroneState>
-                {
-                    new WaitRandom(),
-                    new Launch(),
-                    new FlyTo(100f, 0.1f, 0f),
-                    new ArmFuse(),
-                    new Terminal()
-                },
-                new List<FPVDroneState>
-                {
-                    new WaitRandom(),
-                    new Launch(),
-                    new FlyTo(200f, 0.2f, 0f),
-                    new ArmFuse(),
-                    new FlyToTopAttack(),
-                    new Terminal()
-                },
-                new List<FPVDroneState>
-                {
-                    new WaitRandom(),
-                    new Launch(),
-                    new FlyTo(100f, 0.1f, 0.2f),
-                    new ArmFuse(),
-                    new FlyToSideAttack(),
-                    new Terminal()
-                },
-                new List<FPVDroneState>
-                {
-                    new WaitRandom(),
-                    new Launch(),
-                    new FlyTo(100f, 0.1f, -0.2f),
-                    new ArmFuse(),
-                    new FlyToSideAttack(),
-                    new Terminal()
-                }
-            };
-        }
-        states = strategies[Random.Range(0, strategies.Count)];
-        if (overrideStrat >= 0)
-            states = strategies[overrideStrat];
-        */
         states = GenerateStates();
     }
 
@@ -98,23 +53,13 @@ public class MultiRotorDroneAI : MonoBehaviour, IEngageEnemies
 
     private void FixedUpdate()
     {
+        if (!VTScenario.isScenarioHost)
+        {
+            return;
+        }
+
         droneTargetBlackboard.Update(Time.fixedDeltaTime);
         states.UpdateState();
-
-        /*
-        if (!activated || done)
-            return;
-
-        states[stateId].FixedUpate(this);
-        if (states[stateId].IsDone(this))
-        {
-            stateId++;
-            if (stateId > states.Count)
-            {
-                done = true;
-            }
-        }
-        */
     }
 
     public void SetEngageEnemies(bool engage)
